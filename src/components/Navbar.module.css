@@ -1,0 +1,38 @@
+.navbar {
+  position: sticky; /* se queda fijo arriba */
+  top: 0;
+  left: 0;
+  width: 100vw; /* ocupa todo el ancho */
+  height: 64px; /* altura razonable */
+  background-color: #ff6a6a;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* opcional, si querés que el botón burger quede alineado mejor */
+.navbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbarRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconBtn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn:hover {
+  opacity: 0.8;
+}

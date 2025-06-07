@@ -1,0 +1,16 @@
+.bm-menu-wrap {
+  background: #1c1c1c;
+  padding: 2rem 1rem;
+  font-size: 1.2rem;
+}
+
+.bm-menu a {
+  color: #fff;
+  padding: 0.5rem 0;
+  display: block;
+  text-decoration: none;
+}
+
+.bm-menu a:hover {
+  text-decoration: underline;
+}

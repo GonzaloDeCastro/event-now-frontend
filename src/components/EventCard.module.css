@@ -1,0 +1,14 @@
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+.cardImgTop {
+  width: 100%;
+  height: 180px;
+  object-fit: cover; /* Recorta sin deformar */
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
