@@ -9,6 +9,7 @@ const Register = ({ show, onHide }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.auth);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
   const [userType, setUserType] = useState("assistant");
   const [formData, setFormData] = useState({
     fullName: "",
@@ -62,6 +63,7 @@ const Register = ({ show, onHide }) => {
         userType,
       })
     );
+    setJustLoggedIn(true);
   };
 
   useEffect(() => {
@@ -77,7 +79,7 @@ const Register = ({ show, onHide }) => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user) {
+    if (user && justLoggedIn) {
       Swal.fire({
         icon: "success",
         title: "Registro exitoso",
@@ -86,6 +88,7 @@ const Register = ({ show, onHide }) => {
       });
       onHide(); // cerrar modal
       navigate("/");
+      setJustLoggedIn(false);
     }
   }, [user]);
 

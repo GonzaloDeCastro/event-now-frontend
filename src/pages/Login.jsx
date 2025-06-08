@@ -1,23 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, clearAuthError } from "../redux/authSlice";
+import Swal from "sweetalert2";
 
 const Login = ({ show, onHide }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
+
+  const [emailOrUsername, setEmailOrUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { user, loading, error } = useSelector((state) => state.auth);
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (email && password) {
-      console.log("Logged in:", { email, password });
-      onHide(); // Cerrá el modal
-      navigate("/"); // Redirige al home (opcional)
-    } else {
+    if (!emailOrUsername || !password) {
       alert("Completa ambos campos.");
+      return;
     }
+
+    dispatch(loginUser({ emailOrUsername, password }));
+    setJustLoggedIn(true);
   };
+
+  // Show error alert if login failed
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error,
+      });
+      dispatch(clearAuthError());
+    }
+  }, [error]);
+
+  // Close modal and redirect on success
+  useEffect(() => {
+    if (user && justLoggedIn) {
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      onHide();
+      navigate("/");
+      setJustLoggedIn(false); // Resetea para que no vuelva a disparar el mensaje
+    }
+  }, [user]);
 
   return (
     <Modal show={show} onHide={onHide} centered>
@@ -27,16 +62,16 @@ const Login = ({ show, onHide }) => {
       <Modal.Body>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Correo electrónico
+            <label htmlFor="emailOrUsername" className="form-label">
+              Correo electrónico o nombre de usuario
             </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="usuario@ejemplo.com"
+              id="emailOrUsername"
+              value={emailOrUsername}
+              onChange={(e) => setEmailOrUsername(e.target.value)}
+              placeholder="usuario@ejemplo.com o username"
             />
           </div>
 
@@ -54,8 +89,12 @@ const Login = ({ show, onHide }) => {
             />
           </div>
 
-          <Button type="submit" className="buttonGlobal w-100">
-            Ingresar
+          <Button
+            type="submit"
+            className="buttonGlobal w-100"
+            disabled={loading}
+          >
+            {loading ? "Ingresando..." : "Ingresar"}
           </Button>
         </form>
       </Modal.Body>
