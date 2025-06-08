@@ -10,3 +10,13 @@
   max-width: 100%;
   box-sizing: border-box;
 }
+
+.iconCloseEventDetail {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.iconCloseEventDetail:hover {
+  color: red;
+}

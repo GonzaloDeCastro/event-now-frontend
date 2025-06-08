@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
-import { useState } from "react";
+import EventDetail from "../pages/EventDetail";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const AppRouter = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,6 +19,9 @@ const AppRouter = () => {
       <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/event/:id" element={<EventDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
   );

@@ -11,6 +11,10 @@ export const sampleEvents = [
     isFree: true,
     ageRestriction: "", // todo público
     locationType: "cerrado",
+    description:
+      "Descubre una amplia variedad de libros y obras de arte en nuestra feria del libro.",
+    city: "Rosario",
+    province: "Santa Fe",
   },
   {
     id: "2",
@@ -24,6 +28,10 @@ export const sampleEvents = [
     isFree: false,
     ageRestriction: "13+",
     locationType: "cerrado",
+    description:
+      "Explora la pintura y aprende nuevas habilidades en nuestro taller de pintura.",
+    city: "Rosario",
+    province: "Santa Fe",
   },
   {
     id: "3",
@@ -37,6 +45,10 @@ export const sampleEvents = [
     isFree: false,
     ageRestriction: "18+",
     locationType: "aire libre",
+    description:
+      "Disfruta de un recital de jazz emocionante en nuestro teatro municipal.",
+    city: "Rosario",
+    province: "Santa Fe",
   },
   {
     id: "4",
@@ -50,6 +62,10 @@ export const sampleEvents = [
     isFree: true,
     ageRestriction: "",
     locationType: "aire libre",
+    description:
+      "Disfruta de una experiencia cinematográfica en nuestro parque de cine al aire libre.",
+    city: "Rosario",
+    province: "Santa Fe",
   },
   {
     id: "5",
@@ -63,6 +79,10 @@ export const sampleEvents = [
     isFree: true,
     ageRestriction: "",
     locationType: "aire libre",
+    description:
+      "Explora una variedad de platos veganos en nuestro festival de comida vegana.",
+    city: "Rosario",
+    province: "Santa Fe",
   },
   {
     id: "6",
@@ -76,5 +96,9 @@ export const sampleEvents = [
     isFree: false,
     ageRestriction: "18+",
     locationType: "aire libre",
+    description:
+      "Disfruta de un concierto de rock nacional en nuestro anfiteatro municipal.",
+    city: "Rosario",
+    province: "Santa Fe",
   },
 ];
