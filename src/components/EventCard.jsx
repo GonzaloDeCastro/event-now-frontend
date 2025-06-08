@@ -13,7 +13,7 @@ const EventCard = ({ event }) => {
           <small className="text-muted">{event.date}</small>
         </p>
         <button
-          className="btn btn-primary"
+          className={styles.more}
           onClick={() => navigate(`/event/${event.id}`)}
         >
           Ver más

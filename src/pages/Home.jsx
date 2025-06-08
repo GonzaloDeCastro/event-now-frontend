@@ -29,7 +29,12 @@ const Home = () => {
 
   return (
     <div className={styles.homeContainer}>
-      <h2 className="text-center my-4">Eventos destacados cerca tuyo hoy!</h2>
+      <h2
+        className="text-center my-0"
+        style={{ backgroundColor: "#fdffcd", padding: "1rem" }}
+      >
+        🍸🧉👨‍👩‍👧‍👦🙌Eventos destacados cerca tuyo hoy!🥳🍻🍹🎶
+      </h2>
 
       <div className={styles.gridContainer}>
         {filteredEvents.map((event) => (

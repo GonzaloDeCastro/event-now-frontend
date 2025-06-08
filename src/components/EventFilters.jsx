@@ -72,7 +72,7 @@ const FilterPanel = () => {
         {/* Edad */}
         <div>
           <p className="fw-bold mb-1">Edad</p>
-          {["13+", "18+"].map((age) => (
+          {["APT", "+13", "+18"].map((age) => (
             <div className="form-check" key={age}>
               <input
                 type="checkbox"

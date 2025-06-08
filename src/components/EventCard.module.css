@@ -12,3 +12,16 @@
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
+
+.more {
+  background-color: brown;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.more:hover {
+  background-color: rgb(185, 63, 63);
+}

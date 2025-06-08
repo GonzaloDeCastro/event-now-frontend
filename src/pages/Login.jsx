@@ -20,8 +20,8 @@ const Login = () => {
 
   return (
     <div
-      className="container d-flex justify-content-center align-items-center"
-      style={{ minHeight: "80vh" }}
+      className="d-flex justify-content-center align-items-center"
+      style={{ height: "100%", backgroundColor: "#f8f9fa" }}
     >
       <form
         className="card p-4"

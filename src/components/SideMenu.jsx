@@ -1,30 +1,29 @@
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
-import "./SideMenu.css"; // Estilos obligatorios para el plugin
+import "./SideMenu.css";
 
 const SideMenu = ({ isOpen, onClose }) => {
   return (
     <Menu
       isOpen={isOpen}
       onClose={onClose}
-      width={280}
-      className="bm-menu-wrap"
+      width={250}
       customBurgerIcon={false}
     >
       <a className="menu-item" href="/">
-        Inicio
+        🏠 Inicio
       </a>
       <a className="menu-item" href="/favoritos">
-        Favoritos
+        ⭐ Favoritos
       </a>
       <a className="menu-item" href="/agendados">
-        Agendados
+        🗓️ Agendados
       </a>
       <a className="menu-item" href="/historial">
-        Historial
+        🕙 Historial
       </a>
       <a className="menu-item" href="/suscripciones">
-        Suscripciones
+        🗣️ Suscripciones
       </a>
     </Menu>
   );

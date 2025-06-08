@@ -41,7 +41,8 @@ const Register = () => {
       !formData.fullName ||
       !formData.username ||
       !formData.email ||
-      !formData.password
+      !formData.password ||
+      (userType === "assistant" && !formData.age)
     ) {
       alert("Por favor, completa todos los campos obligatorios.");
       return;
@@ -57,7 +58,10 @@ const Register = () => {
   };
 
   return (
-    <div className=" p-3 " style={{ height: "85vh" }}>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ height: "100%", backgroundColor: "#f8f9fa" }}
+    >
       <form
         onSubmit={handleSubmit}
         className="card mx-auto p-3 shadow"
@@ -176,7 +180,7 @@ const Register = () => {
                 ))}
               </div>
 
-              <div className="col-md-3">
+              <div className="col-md-6">
                 <label className="form-label">Edad *</label>
                 <input
                   type="number"
@@ -217,7 +221,7 @@ const Register = () => {
                 />
               </div>
             </div>
-            <div className="row mb-1">
+            <div className="row mb-3">
               <div className="col-md-6">
                 <label className="form-label">Dirección legal *</label>
                 <input
@@ -240,7 +244,7 @@ const Register = () => {
               </div>{" "}
             </div>
 
-            <div className="row mb-3">
+            {/*   <div className="row mb-3">
               <div className="col-md-6">
                 <label className="form-label">
                   Sitio web o redes sociales (opcional)
@@ -253,7 +257,7 @@ const Register = () => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
+            </div> */}
           </>
         )}
 

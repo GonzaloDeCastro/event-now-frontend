@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import FilterPanel from "./EventFilters";
 import { FaBars } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import { FaBell } from "react-icons/fa";
 
 const Navbar = ({ toggleMenu, isMenuOpen }) => {
   const [showFilters, setShowFilters] = useState(false);
@@ -56,6 +57,22 @@ const Navbar = ({ toggleMenu, isMenuOpen }) => {
       </div>
 
       <div className={styles.navbarRight}>
+        <div style={{ position: "relative" }}>
+          <FaBell
+            style={{
+              cursor: "pointer",
+              color: "white",
+              width: "22px",
+              height: "22px",
+            }}
+          />
+          <span
+            className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            style={{ fontSize: "0.6rem" }}
+          >
+            3
+          </span>
+        </div>
         <ProfileButton />
       </div>
     </nav>

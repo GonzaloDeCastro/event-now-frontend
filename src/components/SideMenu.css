@@ -1,6 +1,6 @@
 .bm-menu-wrap {
-  background: #1c1c1c;
-  padding: 2rem 1rem;
+  background: #343a40; /* gris oscuro */
+  padding: 0.5rem 1rem;
   font-size: 1.2rem;
 }
 
@@ -10,7 +10,19 @@
   display: block;
   text-decoration: none;
 }
-
-.bm-menu a:hover {
+a .bm-menu a:hover {
   text-decoration: underline;
+}
+.menu-item {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8f9fa;
+  border-radius: 10px;
 }
