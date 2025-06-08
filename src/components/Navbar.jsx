@@ -9,18 +9,38 @@ import { FaBars } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaBell } from "react-icons/fa";
 
-const Navbar = ({ toggleMenu, isMenuOpen }) => {
+const Navbar = ({ toggleMenu, isMenuOpen, onLoginClick, onRegisterClick }) => {
   const [showFilters, setShowFilters] = useState(false);
   const filterButtonRef = useRef(null);
   const [panelPosition, setPanelPosition] = useState({ left: 0, top: 0 });
-
+  const filterPanelRef = useRef(null);
   useEffect(() => {
     if (showFilters && filterButtonRef.current) {
+      // Calcular posición del panel
       const rect = filterButtonRef.current.getBoundingClientRect();
       setPanelPosition({
         left: rect.left,
         top: rect.bottom - 28, // un poco de separación
       });
+
+      // Handler para cerrar si se hace clic afuera
+      const handleClickOutside = (event) => {
+        if (
+          filterButtonRef.current &&
+          filterPanelRef.current &&
+          !filterButtonRef.current.contains(event.target) &&
+          !filterPanelRef.current.contains(event.target)
+        ) {
+          setShowFilters(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      // Cleanup
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     }
   }, [showFilters]);
 
@@ -44,6 +64,7 @@ const Navbar = ({ toggleMenu, isMenuOpen }) => {
 
         {showFilters && (
           <div
+            ref={filterPanelRef}
             className="position-absolute"
             style={{
               left: panelPosition.left,
@@ -73,7 +94,10 @@ const Navbar = ({ toggleMenu, isMenuOpen }) => {
             3
           </span>
         </div>
-        <ProfileButton />
+        <ProfileButton
+          onLoginClick={onLoginClick}
+          onRegisterClick={onRegisterClick}
+        />
       </div>
     </nav>
   );

@@ -3,6 +3,11 @@ import styles from "./EventCard.module.css";
 
 const EventCard = ({ event }) => {
   const navigate = useNavigate();
+
+  const handleAttend = () => {
+    console.log(`Asistir al evento: ${event.title}`);
+  };
+
   return (
     <div className={`card ${styles.card}`}>
       <img src={event.image} className={styles.cardImgTop} alt={event.title} />
@@ -12,12 +17,17 @@ const EventCard = ({ event }) => {
         <p className="card-text">
           <small className="text-muted">{event.date}</small>
         </p>
-        <button
-          className={styles.more}
-          onClick={() => navigate(`/event/${event.id}`)}
-        >
-          Ver más
-        </button>
+        <div className="d-flex gap-2">
+          <button
+            className={styles.more}
+            onClick={() => navigate(`/event/${event.id}`)}
+          >
+            Ver más
+          </button>
+          <button className={`btn btn-outline-primary`} onClick={handleAttend}>
+            Asistir
+          </button>
+        </div>
       </div>
     </div>
   );

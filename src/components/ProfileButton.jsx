@@ -1,17 +1,13 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 
-const ProfileButton = () => {
-  const navigate = useNavigate();
-
+const ProfileButton = ({ onLoginClick, onRegisterClick }) => {
   return (
     <div
       className="d-flex align-items-center gap-3"
       style={{ marginRight: "1rem", color: "white" }}
     >
       <div
-        onClick={() => navigate("/login")}
+        onClick={onLoginClick}
         style={{
           cursor: "pointer",
           borderRight: "1px solid white",
@@ -21,7 +17,7 @@ const ProfileButton = () => {
         Iniciar Sesión
       </div>
 
-      <div onClick={() => navigate("/register")} style={{ cursor: "pointer" }}>
+      <div onClick={onRegisterClick} style={{ cursor: "pointer" }}>
         Registrarse
       </div>
 

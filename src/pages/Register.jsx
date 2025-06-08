@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ show, onHide }) => {
   const navigate = useNavigate();
   const [userType, setUserType] = useState("assistant");
 
@@ -36,7 +37,6 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validación simple (deberías mejorarla con SweetAlert2 más adelante)
     if (
       !formData.fullName ||
       !formData.username ||
@@ -52,115 +52,116 @@ const Register = () => {
       return;
     }
 
-    // Simulación
     console.log("Datos enviados:", { ...formData, userType });
-    navigate("/");
+    onHide(); // cerrar modal
+    navigate("/"); // redirigir (opcional)
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ height: "100%", backgroundColor: "#f8f9fa" }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        className="card mx-auto p-3 shadow"
-        style={{ width: "95%" }}
-      >
-        <h3 className="text-center mb-1">Registro</h3>
-
-        {/* Tipo de usuario */}
-        <div className="mb-1">
-          <label className="form-label d-block">Tipo de cuenta</label>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="userType"
-              value="assistant"
-              checked={userType === "assistant"}
-              onChange={() => setUserType("assistant")}
-            />
-            <label className="form-check-label">Asistente</label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="userType"
-              value="organizer"
-              checked={userType === "organizer"}
-              onChange={() => setUserType("organizer")}
-            />
-            <label className="form-check-label">Organizador</label>
-          </div>
-        </div>
-
-        {/* Comunes */}
-        {/* Comunes */}
-        <div className="row mb-1">
-          <div className="col-md-6">
-            <label className="form-label">Nombre completo *</label>
-            <input
-              type="text"
-              className="form-control"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-            />
+    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
+      <Modal.Header closeButton>
+        <Modal.Title>Registro</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form onSubmit={handleSubmit}>
+          {/* Tipo de cuenta */}
+          <div className="mb-1">
+            <label className="form-label d-block">Tipo de cuenta</label>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="userType"
+                value="assistant"
+                checked={userType === "assistant"}
+                onChange={() => setUserType("assistant")}
+              />
+              <label className="form-check-label">Asistente</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="userType"
+                value="organizer"
+                checked={userType === "organizer"}
+                onChange={() => setUserType("organizer")}
+              />
+              <label className="form-check-label">Organizador</label>
+            </div>
           </div>
 
-          <div className="col-md-6">
-            <label className="form-label">Nombre de usuario *</label>
-            <input
-              type="text"
-              className="form-control"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="row mb-1">
-          <div className="col-md-6">
-            <label className="form-label">Correo electrónico *</label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-md-3">
-            <label className="form-label">Contraseña *</label>
-            <input
-              type="password"
-              className="form-control"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
+          {/* Comunes */}
+          <div className="row mb-1">
+            <div className="col-md-6">
+              <label className="form-label">Nombre completo *</label>
+              <input
+                type="text"
+                className="form-control"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Nombre de usuario *</label>
+              <input
+                type="text"
+                className="form-control"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
-          <div className="col-md-3">
-            <label className="form-label">Repetir contraseña *</label>
-            <input
-              type="password"
-              className="form-control"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
+          <div className="row mb-1">
+            <div className="col-md-6">
+              <label className="form-label">Correo electrónico *</label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Contraseña *</label>
+              <input
+                type="password"
+                className="form-control"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Repetir contraseña *</label>
+              <input
+                type="password"
+                className="form-control"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Asistente: Preferencias y edad */}
-        {userType === "assistant" && (
-          <>
+          {/* Asistente */}
+          {userType === "assistant" && (
             <div className="row mb-3">
+              {" "}
+              <div className="col-md-6">
+                <label className="form-label">Edad *</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                />
+              </div>
               <div className="col-md-6">
                 <label className="form-label d-block">
                   Preferencias (opcional)
@@ -179,93 +180,67 @@ const Register = () => {
                   </div>
                 ))}
               </div>
-
-              <div className="col-md-6">
-                <label className="form-label">Edad *</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="age"
-                  value={formData.age}
-                  onChange={handleChange}
-                />
-              </div>
             </div>
-          </>
-        )}
+          )}
 
-        {/* Organizador: Datos legales */}
-        {userType === "organizer" && (
-          <>
-            <div className="row mb-1">
-              <div className="col-md-6">
-                <label className="form-label">
-                  Nombre legal / Razón social *
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="legalName"
-                  value={formData.legalName}
-                  onChange={handleChange}
-                />
-              </div>{" "}
-              <div className="col-md-6">
-                <label className="form-label">CUIT o ID fiscal *</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="taxId"
-                  value={formData.taxId}
-                  onChange={handleChange}
-                />
+          {/* Organizador */}
+          {userType === "organizer" && (
+            <>
+              <div className="row mb-1">
+                <div className="col-md-6">
+                  <label className="form-label">
+                    Nombre legal / Razón social *
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="legalName"
+                    value={formData.legalName}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">CUIT o ID fiscal *</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="taxId"
+                    value={formData.taxId}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <label className="form-label">Dirección legal *</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="legalAddress"
-                  value={formData.legalAddress}
-                  onChange={handleChange}
-                />
-              </div>{" "}
-              <div className="col-md-6">
-                <label className="form-label">Teléfono de contacto *</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>{" "}
-            </div>
-
-            {/*   <div className="row mb-3">
-              <div className="col-md-6">
-                <label className="form-label">
-                  Sitio web o redes sociales (opcional)
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="website"
-                  value={formData.website}
-                  onChange={handleChange}
-                />
+              <div className="row mb-3">
+                <div className="col-md-6">
+                  <label className="form-label">Dirección legal *</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="legalAddress"
+                    value={formData.legalAddress}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Teléfono de contacto *</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-            </div> */}
-          </>
-        )}
+            </>
+          )}
 
-        <button type="submit" className="btn btn-success w-100">
-          Registrarse
-        </button>
-      </form>
-    </div>
+          <Button type="submit" className="btn btn-success w-100">
+            Registrarse
+          </Button>
+        </form>
+      </Modal.Body>
+    </Modal>
   );
 };
 
