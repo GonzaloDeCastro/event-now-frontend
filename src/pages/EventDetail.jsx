@@ -84,7 +84,7 @@ const EventDetail = () => {
         </div>
         <div className="mt-4 d-flex justify-content-end">
           <button
-            className={`btn btn-outline-primary`}
+            className={`btn btn-outline-danger btn-sm`}
             onClick={() => console.log(`Asistir al evento: ${event.title}`)}
           >
             Asistir

@@ -54,7 +54,7 @@ const Login = ({ show, onHide }) => {
             />
           </div>
 
-          <Button type="submit" variant="primary" className="w-100">
+          <Button type="submit" className="buttonGlobal w-100">
             Ingresar
           </Button>
         </form>

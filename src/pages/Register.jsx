@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../redux/authSlice";
+import Swal from "sweetalert2";
 
 const Register = ({ show, onHide }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.auth);
   const [userType, setUserType] = useState("assistant");
-
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -52,10 +56,38 @@ const Register = ({ show, onHide }) => {
       return;
     }
 
-    console.log("Datos enviados:", { ...formData, userType });
-    onHide(); // cerrar modal
-    navigate("/"); // redirigir (opcional)
+    dispatch(
+      registerUser({
+        ...formData,
+        userType,
+      })
+    );
   };
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error,
+      });
+    }
+  }, [error]);
+
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (user) {
+      Swal.fire({
+        icon: "success",
+        title: "Registro exitoso",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      onHide(); // cerrar modal
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered scrollable>
@@ -235,7 +267,7 @@ const Register = ({ show, onHide }) => {
             </>
           )}
 
-          <Button type="submit" className="btn btn-success w-100">
+          <Button type="submit" className="buttonGlobal w-100">
             Registrarse
           </Button>
         </form>
