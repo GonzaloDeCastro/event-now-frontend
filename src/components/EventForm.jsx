@@ -112,7 +112,14 @@ const EventForm = ({ onClose }) => {
         centered
         size="lg"
       >
-        <Modal.Header closeButton>
+        <Modal.Header
+          closeButton
+          className={`${
+            user && user.userType == 2
+              ? "modal-header-organizer"
+              : "modal-header"
+          }`}
+        >
           <Modal.Title>Crear nuevo evento</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -266,7 +273,7 @@ const EventForm = ({ onClose }) => {
             </div>
 
             <div className="col-12 text-end">
-              <Button type="submit" className="buttonGlobal">
+              <Button type="submit" className="buttonGlobalOrganizer">
                 Crear evento
               </Button>
             </div>

@@ -20,6 +20,12 @@ body,
   border-bottom: 1px solid #dee2e6; /* Línea inferior sutil */
   color: #fff;
 }
+
+.modal-header-organizer {
+  background-color: #6ab0ff; /* Color de fondo gris claro */
+  border-bottom: 1px solid #dee2e6; /* Línea inferior sutil */
+  color: #fff;
+}
 .modal-title {
   display: flex;
   align-items: center;
@@ -38,4 +44,17 @@ body,
 
 .buttonGlobal:hover {
   background-color: rgb(185, 63, 63);
+}
+
+.buttonGlobalOrganizer {
+  background-color: #2486f7;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.buttonGlobalOrganizer:hover {
+  background-color: #4c9fff;
 }

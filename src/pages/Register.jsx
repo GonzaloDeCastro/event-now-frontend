@@ -19,9 +19,9 @@ const Register = ({ show, onHide }) => {
     confirmPassword: "",
     preferences: [],
     age: "",
-    legalName: "",
-    taxId: "",
-    legalAddress: "",
+    legal_name: "",
+    tax_id: "",
+    legal_address: "",
     phone: "",
     website: "",
   });
@@ -229,8 +229,8 @@ const Register = ({ show, onHide }) => {
                   <input
                     type="text"
                     className="form-control"
-                    name="legalName"
-                    value={formData.legalName}
+                    name="legal_name"
+                    value={formData.legal_name}
                     onChange={handleChange}
                   />
                 </div>
@@ -239,8 +239,8 @@ const Register = ({ show, onHide }) => {
                   <input
                     type="text"
                     className="form-control"
-                    name="taxId"
-                    value={formData.taxId}
+                    name="tax_id"
+                    value={formData.tax_id}
                     onChange={handleChange}
                   />
                 </div>
@@ -251,8 +251,8 @@ const Register = ({ show, onHide }) => {
                   <input
                     type="text"
                     className="form-control"
-                    name="legalAddress"
-                    value={formData.legalAddress}
+                    name="legal_address"
+                    value={formData.legal_address}
                     onChange={handleChange}
                   />
                 </div>
