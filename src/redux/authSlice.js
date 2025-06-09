@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import API_URL from "../config";
 
 // Async thunk for user registration
 export const registerUser = createAsyncThunk(
@@ -53,6 +52,7 @@ export const fetchUserFromToken = createAsyncThunk(
 
       return response.data;
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue("Invalid or expired token");
     }
   }

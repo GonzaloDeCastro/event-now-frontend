@@ -20,6 +20,7 @@ a .bm-menu a:hover {
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   transition: background 0.2s ease;
+  cursor: pointer;
 }
 .menu-item:hover {
   background: rgba(255, 255, 255, 0.1);

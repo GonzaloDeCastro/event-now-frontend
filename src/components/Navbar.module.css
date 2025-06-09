@@ -2,9 +2,19 @@
   position: sticky; /* se queda fijo arriba */
   top: 0;
   left: 0;
-  width: 100vw; /* ocupa todo el ancho */
   height: 64px; /* altura razonable */
   background-color: #ff6a6a;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.navbarOrganizer {
+  position: sticky; /* se queda fijo arriba */
+  top: 0;
+  left: 0;
+  height: 64px; /* altura razonable */
+  background-color: #6ab0ff;
   border-bottom: 1px solid #dee2e6;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
