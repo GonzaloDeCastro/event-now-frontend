@@ -2,14 +2,28 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useParams, useNavigate } from "react-router-dom";
 import { sampleEvents } from "../redux/sampleEvents";
 import styles from "./Home.module.css";
+import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 const EventDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { user } = useSelector((state) => state.auth);
   const event = sampleEvents.find((e) => e.id === id);
 
   if (!event) return <p className="text-center mt-5">Evento no encontrado.</p>;
+  const handleAttend = () => {
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Debes iniciar sesión para asistir al evento",
+        showCancelButton: false,
+        confirmButtonText: "OK",
+      });
+    }
+
+    console.log(`Asistir al evento: ${event.title}`);
+  };
 
   return (
     <div className="container py-1">
@@ -85,7 +99,7 @@ const EventDetail = () => {
         <div className="mt-4 d-flex justify-content-end">
           <button
             className={`btn btn-outline-danger btn-sm`}
-            onClick={() => console.log(`Asistir al evento: ${event.title}`)}
+            onClick={handleAttend}
           >
             Asistir
           </button>

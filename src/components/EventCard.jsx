@@ -1,10 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./EventCard.module.css";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const EventCard = ({ event }) => {
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
   const handleAttend = () => {
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Debes iniciar sesión para asistir al evento",
+        showCancelButton: false,
+        confirmButtonText: "OK",
+      });
+    }
+
     console.log(`Asistir al evento: ${event.title}`);
   };
 

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, clearAuthError } from "../redux/authSlice";
@@ -7,12 +6,9 @@ import Swal from "sweetalert2";
 
 const Login = ({ show, onHide }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [justLoggedIn, setJustLoggedIn] = useState(false);
-
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const { user, loading, error } = useSelector((state) => state.auth);
 
   const handleLogin = (e) => {
@@ -49,7 +45,6 @@ const Login = ({ show, onHide }) => {
         timer: 1500,
       });
       onHide();
-      navigate("/");
       setJustLoggedIn(false); // Resetea para que no vuelva a disparar el mensaje
     }
   }, [user]);
