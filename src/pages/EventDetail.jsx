@@ -1,17 +1,38 @@
 import { IoCloseSharp } from "react-icons/io5";
 import { useParams, useNavigate } from "react-router-dom";
-import { sampleEvents } from "../redux/sampleEvents";
 import styles from "./Home.module.css";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import API_URL from "../config";
 
 const EventDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const event = sampleEvents.find((e) => e.id === id);
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!event) return <p className="text-center mt-5">Evento no encontrado.</p>;
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/events/by-id/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // si es privado
+          },
+        });
+        setEvent(response.data);
+      } catch (error) {
+        console.error("Error fetching event:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [id]);
+
   const handleAttend = () => {
     if (!user) {
       Swal.fire({
@@ -20,10 +41,14 @@ const EventDetail = () => {
         showCancelButton: false,
         confirmButtonText: "OK",
       });
+      return;
     }
 
     console.log(`Asistir al evento: ${event.title}`);
   };
+
+  if (loading) return <p className="text-center mt-5">Cargando evento...</p>;
+  if (!event) return <p className="text-center mt-5">Evento no encontrado.</p>;
 
   return (
     <div className="container py-1">
@@ -40,7 +65,7 @@ const EventDetail = () => {
 
       <div className="card p-4 shadow-sm">
         <img
-          src={event.image}
+          src={event.image_url}
           alt={event.title}
           className="img-fluid rounded mb-4"
           style={{ maxHeight: "400px", objectFit: "cover", width: "100%" }}
@@ -59,23 +84,23 @@ const EventDetail = () => {
           </div>
           <div className="col-md-6">
             <span>
-              👤 <strong>Organiza:</strong> {event.organizer}
+              👤 <strong>Organiza:</strong> {event.organizer || "Desconocido"}
             </span>
           </div>
           <div className="col-md-6">
             <span>
-              💸 <strong>Acceso:</strong> {event.isFree ? "Gratuito" : "Pago"}
+              💸 <strong>Acceso:</strong> {event.is_free ? "Gratuito" : "Pago"}
             </span>
           </div>
           <div className="col-md-6">
             <span>
               🔞 <strong>Edad:</strong>{" "}
-              {event.ageRestriction || "Todas las edades"}
+              {event.age_restriction || "Todas las edades"}
             </span>
           </div>
           <div className="col-md-6">
             <span>
-              🏛️ <strong>Tipo de lugar:</strong> {event.locationType}
+              🏛️ <strong>Tipo de lugar:</strong> {event.location_type}
             </span>
           </div>
           <div className="col-md-6">
@@ -96,6 +121,7 @@ const EventDetail = () => {
             </span>
           </div>
         </div>
+
         <div className="mt-4 d-flex justify-content-end">
           <button
             className={`btn btn-outline-danger btn-sm`}

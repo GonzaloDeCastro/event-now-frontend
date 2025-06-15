@@ -6,6 +6,7 @@ import SideMenu from "../components/SideMenu";
 import EventDetail from "../pages/EventDetail";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import MyCreatedEvents from "../pages/MyCreatedEvents";
 const AppRouter = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -26,6 +27,7 @@ const AppRouter = () => {
         <Route path="/event/:id" element={<EventDetail />} />
         {/* Eliminamos la ruta de login */}
         <Route path="/register" element={<Register />} />
+        <Route path="/my-created-events" element={<MyCreatedEvents />} />
       </Routes>
       <Register show={showRegister} onHide={() => setShowRegister(false)} />
       {/* Modal de login */}

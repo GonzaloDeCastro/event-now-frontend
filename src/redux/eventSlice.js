@@ -21,12 +21,34 @@ export const createEvent = createAsyncThunk(
   }
 );
 
+export const getMyCreatedEvents = createAsyncThunk(
+  "events/getMyCreatedEvents",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      const response = await axios.get(`${API_URL}/events/by-organizer`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data; // asumimos que es un array de eventos
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: "Unknown error" }
+      );
+    }
+  }
+);
+
 const eventSlice = createSlice({
   name: "events",
   initialState: {
     loading: false,
     error: null,
     successMessage: null,
+    myCreatedEvents: [], // nuevo
   },
   reducers: {
     clearEventError: (state) => {
@@ -49,6 +71,18 @@ const eventSlice = createSlice({
           action.payload.message || "Event created successfully";
       })
       .addCase(createEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getMyCreatedEvents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getMyCreatedEvents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.myCreatedEvents = action.payload; // deberías agregar `myCreatedEvents` al initialState
+      })
+      .addCase(getMyCreatedEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

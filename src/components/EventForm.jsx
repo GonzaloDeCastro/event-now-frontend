@@ -94,6 +94,7 @@ const EventForm = ({ onClose }) => {
     }
   }, [successMessage, error]);
 
+  // Check if user is logged in and is an organizer and show button Crear Evento
   if (!user || user.userType !== 2) return null;
 
   const handleShowModal = () => {

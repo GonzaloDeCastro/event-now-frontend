@@ -16,6 +16,12 @@ const SideMenu = ({ isOpen, onClose }) => {
       <a className="menu-item" href="/">
         🏠 Inicio
       </a>
+      {!user ||
+        (user.userType == 2 && (
+          <a className="menu-item" href="/my-created-events">
+            🗓️ Eventos Creados
+          </a>
+        ))}
       {user && <EventForm onClose={onClose} />}
       <a className="menu-item" href="/favoritos">
         ⭐ Favoritos
