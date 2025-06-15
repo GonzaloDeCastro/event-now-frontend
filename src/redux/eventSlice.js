@@ -42,13 +42,28 @@ export const getMyCreatedEvents = createAsyncThunk(
   }
 );
 
+export const getAllEvents = createAsyncThunk(
+  "events/getAllEvents",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_URL}/events`);
+      return response.data; // debería ser un array de eventos
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Error fetching events"
+      );
+    }
+  }
+);
+
 const eventSlice = createSlice({
   name: "events",
   initialState: {
     loading: false,
     error: null,
     successMessage: null,
-    myCreatedEvents: [], // nuevo
+    myCreatedEvents: [],
+    allEvents: [],
   },
   reducers: {
     clearEventError: (state) => {
@@ -83,6 +98,18 @@ const eventSlice = createSlice({
         state.myCreatedEvents = action.payload; // deberías agregar `myCreatedEvents` al initialState
       })
       .addCase(getMyCreatedEvents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAllEvents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllEvents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allEvents = action.payload;
+      })
+      .addCase(getAllEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
