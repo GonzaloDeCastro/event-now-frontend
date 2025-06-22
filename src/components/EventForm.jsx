@@ -95,7 +95,7 @@ const EventForm = ({ onClose }) => {
   }, [successMessage, error]);
 
   // Check if user is logged in and is an organizer and show button Crear Evento
-  if (!user || user.userType !== 2) return null;
+  if (!user || user.role !== 2) return null;
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -116,9 +116,7 @@ const EventForm = ({ onClose }) => {
         <Modal.Header
           closeButton
           className={`${
-            user && user.userType == 2
-              ? "modal-header-organizer"
-              : "modal-header"
+            user && user.role == 2 ? "modal-header-organizer" : "modal-header"
           }`}
         >
           <Modal.Title>Crear nuevo evento</Modal.Title>

@@ -10,7 +10,7 @@ const Register = ({ show, onHide }) => {
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.auth);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
-  const [userType, setUserType] = useState("assistant");
+  const [role, setUserType] = useState("assistant");
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -47,7 +47,7 @@ const Register = ({ show, onHide }) => {
       !formData.username ||
       !formData.email ||
       !formData.password ||
-      (userType === "assistant" && !formData.age)
+      (role === "assistant" && !formData.age)
     ) {
       alert("Por favor, completa todos los campos obligatorios.");
       return;
@@ -60,7 +60,7 @@ const Register = ({ show, onHide }) => {
     dispatch(
       registerUser({
         ...formData,
-        userType,
+        role,
       })
     );
     setJustLoggedIn(true);
@@ -106,9 +106,9 @@ const Register = ({ show, onHide }) => {
               <input
                 className="form-check-input"
                 type="radio"
-                name="userType"
+                name="role"
                 value="assistant"
-                checked={userType === "assistant"}
+                checked={role === "assistant"}
                 onChange={() => setUserType("assistant")}
               />
               <label className="form-check-label">Asistente</label>
@@ -117,9 +117,9 @@ const Register = ({ show, onHide }) => {
               <input
                 className="form-check-input"
                 type="radio"
-                name="userType"
+                name="role"
                 value="organizer"
-                checked={userType === "organizer"}
+                checked={role === "organizer"}
                 onChange={() => setUserType("organizer")}
               />
               <label className="form-check-label">Organizador</label>
@@ -184,7 +184,7 @@ const Register = ({ show, onHide }) => {
           </div>
 
           {/* Asistente */}
-          {userType === "assistant" && (
+          {role === "assistant" && (
             <div className="row mb-3">
               {" "}
               <div className="col-md-6">
@@ -219,7 +219,7 @@ const Register = ({ show, onHide }) => {
           )}
 
           {/* Organizador */}
-          {userType === "organizer" && (
+          {role === "organizer" && (
             <>
               <div className="row mb-1">
                 <div className="col-md-6">

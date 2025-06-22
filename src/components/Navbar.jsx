@@ -49,7 +49,7 @@ const Navbar = ({ toggleMenu, isMenuOpen, onLoginClick, onRegisterClick }) => {
   return (
     <nav
       className={`d-flex align-items-center justify-content-between px-3 py-2 ${
-        user && user.userType == 2 ? styles.navbarOrganizer : styles.navbar
+        user && user.role == 2 ? styles.navbarOrganizer : styles.navbar
       } `}
     >
       <div className="d-flex align-items-center gap-3 position-relative">
