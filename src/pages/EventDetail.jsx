@@ -17,11 +17,7 @@ const EventDetail = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get(`${API_URL}/events/by-id/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // si es privado
-          },
-        });
+        const response = await axios.get(`${API_URL}/events/by-id/${id}`);
         setEvent(response.data);
       } catch (error) {
         console.error("Error fetching event:", error);
