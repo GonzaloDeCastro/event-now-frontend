@@ -1,82 +1,67 @@
-# Event Now 🎉
+```mermaid
+sequenceDiagram
+    participant Usuario as Usuario Asistente
+    participant UI as Sitio / Aplicación
+    participant Controlador as ControladorExploracionEventos
+    participant BD as Base de Datos
 
-**Event Now** es una aplicación web moderna que conecta a personas con eventos culturales, recreativos, académicos y de entretenimiento en su área. Inspirado en plataformas como Eventbrite o Mercado Libre, permite a usuarios explorar eventos de forma abierta y personalizada, ya sea desde un navegador o un dispositivo móvil.
+    %% Flujo principal
+    Usuario->>UI: Accede al sitio o aplicación
+    UI->>Controlador: Solicita eventos destacados
+    Controlador->>BD: Obtener eventos destacados
+    BD-->>Controlador: Lista de eventos
+    Controlador-->>UI: Muestra eventos destacados y filtros
 
----
+    Usuario->>UI: Aplica filtros (categoría, ubicación, fecha)
+    UI->>Controlador: Solicita eventos filtrados
+    Controlador->>BD: Buscar eventos según filtros
+    BD-->>Controlador: Resultados filtrados
+    Controlador-->>UI: Muestra eventos filtrados
 
-## 🚀 Funcionalidades principales
+    Usuario->>UI: Visualiza detalle de un evento
+    UI->>Controlador: Solicita detalle del evento
+    Controlador->>BD: Obtener datos del evento
+    BD-->>Controlador: Datos del evento
+    Controlador-->>UI: Muestra detalle del evento
 
-- 🔍 Búsqueda abierta de eventos sin necesidad de registrarse
-- 🎯 Filtros combinables por:
-  - Categoría (música, taller, feria, teatro, etc.)
-  - Fecha
-  - Gratuito / Pago
-  - Edad (todo público, 13+, 18+)
-  - Tipo de ubicación (aire libre, cerrado)
-- 🧾 Registro e inicio de sesión de usuarios
-- ⭐ Guardar eventos como favoritos
-- 🗓️ Historial y agenda personal de eventos
-- 📝 Panel de creación de eventos para organizadores
-- 💬 Sistema de reseñas y calificaciones
-- 🛠️ Sistema de roles (usuario asistente, organizador particular, institución oficial)
-- 🔐 Seguridad y validación para organizadores institucionales
-
----
-
-## ⚙️ Tecnologías utilizadas
-
-| Frontend                | Backend           | Base de Datos | Herramientas   |
-| ----------------------- | ----------------- | ------------- | -------------- |
-| React (Vite)            | Node.js (Express) | MySQL         | Redux Toolkit  |
-| React Router            | JWT / Sessions    |               | Axios, Dotenv  |
-| Bootstrap + CSS Modules |                   |               | SweetAlert2    |
-| React Icons             |                   |               | UUID, Date-fns |
-
----
-
-## 🧱 Arquitectura general
-
-- 🔗 Navegación SPA con React Router DOM
-- 📦 Manejo de estado global con Redux Toolkit
-- 🧩 Componentes reutilizables y desacoplados
-- 📁 Backend RESTful con Express
-- 🔐 Seguridad con JWT y cookies HTTP-only (planificado)
-- ☁️ Contenedores Docker para despliegue (planificado)
-
----
-
-## 🧪 Estado actual
-
-✅ Implementado:
-
-- Home pública con navegación y filtros
-- Sample data de eventos con filtrado en tiempo real
-- Sistema de filtros combinables con checkboxes
-- Menú lateral tipo burger con `react-burger-menu`
-- Diseño responsivo con Bootstrap
-
-🔜 Próximas features:
-
-- Login/registro de usuarios
-- Gestión de favoritos
-- Vista detallada de cada evento
-- Panel para organizadores
-- Base de datos real + conexión backend
-- Despliegue en Vercel/Render + PlanetScale/PlanetsQL
-
----
-
-## 📷 Vista previa
-
-> A incluir capturas de pantalla del home, menú burger, filtros y cards de eventos.
-
----
-
-## 📦 Instalación local
-
-```bash
-git clone https://github.com/tuusuario/event-now.git
-cd event-now
-npm install
-npm run dev
+    %% Alternativa
+    alt No hay eventos disponibles
+        BD-->>Controlador: Lista vacía
+        Controlador-->>UI: Mostrar mensaje “No hay eventos disponibles por el momento”
+    end
 ```
+
+```mermaid
+sequenceDiagram
+    participant Usuario as Usuario
+    participant UI as Interfaz (Sitio / App)
+    participant Controlador as ControladorRegistro
+    participant BD as Base de Datos
+
+    %% Flujo principal
+    Usuario->>UI: Clic en “Registrarse”
+    UI->>Controlador: Mostrar formulario de registro
+    Usuario->>UI: Completa campos obligatorios
+    UI->>Controlador: Enviar datos del formulario
+    Controlador->>BD: Validar datos
+    alt Datos válidos
+        Controlador->>BD: Crear nuevo usuario
+        BD-->>Controlador: Confirmación de creación
+        Controlador-->>UI: Mostrar mensaje de registro exitoso
+    else Datos inválidos
+        Controlador-->>UI: Mostrar mensaje de error
+        Usuario->>UI: Corrige los campos
+        UI->>Controlador: Reenvía datos
+        Controlador->>BD: Validar datos nuevamente
+        opt Datos ahora válidos
+            Controlador->>BD: Crear nuevo usuario
+            BD-->>Controlador: Confirmación de creación
+            Controlador-->>UI: Mostrar mensaje de registro exitoso
+        end
+    end
+
+    %% Alternativa: Usuario cancela el registro
+    alt El usuario cierra el formulario
+        Usuario->>UI: Cierra formulario de registro
+        note over UI: Registro cancelado, fin del caso de uso
+    end
