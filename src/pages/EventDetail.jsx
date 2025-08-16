@@ -1,5 +1,6 @@
-import { IoCloseSharp } from "react-icons/io5";
-import { useParams, useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { Map, Marker } from "pigeon-maps";
+import { useParams /* useNavigate */ } from "react-router-dom";
 import styles from "./Home.module.css";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
@@ -9,7 +10,7 @@ import API_URL from "../config";
 
 const EventDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  /* const navigate = useNavigate(); */
   const { user } = useSelector((state) => state.auth);
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,19 +48,22 @@ const EventDetail = () => {
   if (!event) return <p className="text-center mt-5">Evento no encontrado.</p>;
 
   return (
-    <div className="container py-1">
+    <div
+      style={{
+        border: "none",
+      }}
+    >
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold m-0">{event.title}</h2>
-        <div
+        {/* <div
           className={styles.iconCloseEventDetail}
           onClick={() => navigate(-1)}
           title="Cerrar"
         >
-          <IoCloseSharp size={24} />
-        </div>
+          <IoMdArrowRoundBack size={24} />
+        </div> */}
       </div>
 
-      <div className="card p-4 shadow-sm">
+      <div className={styles.containerEventDetail}>
         <img
           src={event.image_url}
           alt={event.title}
@@ -68,9 +72,17 @@ const EventDetail = () => {
         />
 
         <div className={`row gy-3 ${styles.eventDetails}`}>
+          <h2 className="fw-bold m-0">{event.title}</h2>
           <div className="col-md-6">
             <span>
-              📅 <strong>Fecha:</strong> {event.date}
+              📅 <strong>Fecha:</strong>{" "}
+              {new Date(event.date).toLocaleDateString("es-AR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </span>
           </div>
           <div className="col-md-6">
@@ -119,6 +131,13 @@ const EventDetail = () => {
             <p className="mt-1">{event.description}</p>
           </div>
         </div>
+        <Map
+          height={300}
+          defaultCenter={[-32.95698, -60.645007]}
+          defaultZoom={14}
+        >
+          <Marker width={50} anchor={[-32.95698, -60.645007]} />
+        </Map>
 
         <div className="mt-4 d-flex justify-content-end">
           <button

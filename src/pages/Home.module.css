@@ -29,7 +29,8 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .eventDetails span {
@@ -52,4 +53,8 @@
 
 .eventDetails .col-12:last-child span {
   border-bottom: none; /* quita la línea al final */
+}
+
+.containerEventDetail {
+  padding: 0px 10px 10px 10px;
 }

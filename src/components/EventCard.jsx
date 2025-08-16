@@ -48,10 +48,7 @@ const EventCard = ({ event }) => {
           >
             Ver más
           </button>
-          <button
-            className="btn btn-outline-danger btn-sm"
-            onClick={handleAttend}
-          >
+          <button className="btn btn-outline-danger btn" onClick={handleAttend}>
             Asistir
           </button>
 

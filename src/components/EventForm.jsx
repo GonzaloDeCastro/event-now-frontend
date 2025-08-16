@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { Map, Marker } from "pigeon-maps";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createEventAPI,
@@ -8,12 +9,15 @@ import {
 } from "../redux/eventSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import AddressAutocomplete from "./AddressAutocomplete";
 
 const EventForm = ({ onClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { user } = useSelector((state) => state.auth);
   const { error, successMessage } = useSelector((state) => state.events);
+  const userLocation = useSelector((state) => state.location);
 
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,7 +37,28 @@ const EventForm = ({ onClose }) => {
     capacity: 0,
     age_restriction: "",
     has_checkin: false,
+    latitude: null,
+    longitude: null,
   });
+
+  // arriba, junto a tus useState:
+  const [mapCenter, setMapCenter] = useState(null); // [lat, lng] o null
+  const [mapZoom, setMapZoom] = useState(14);
+
+  // cuando cambian las coords del form o la ubicación del usuario, recalculá el centro
+  useEffect(() => {
+    if (formData.latitude && formData.longitude) {
+      setMapCenter([Number(formData.latitude), Number(formData.longitude)]);
+      setMapZoom(16); // un zoom más cercano al seleccionar dirección
+    } else if (userLocation?.coords) {
+      setMapCenter([userLocation.coords.lat, userLocation.coords.lng]);
+      setMapZoom(14);
+    } else {
+      // fallback (Rosario como ejemplo)
+      setMapCenter([-32.9442, -60.6505]);
+      setMapZoom(12);
+    }
+  }, [formData.latitude, formData.longitude, userLocation?.coords]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -133,7 +158,7 @@ const EventForm = ({ onClose }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-12">
               <input
                 className="form-control"
                 name="image_url"
@@ -142,6 +167,55 @@ const EventForm = ({ onClose }) => {
               />
             </div>
             <div className="col-md-6">
+              <AddressAutocomplete
+                value={formData.location}
+                countryCodes="ar"
+                contextCity={formData.city}
+                contextProvince={formData.province}
+                proximity={userLocation.coords}
+                radiusKm={25}
+                onSelect={(sel) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    location: sel.label,
+                    city: sel.city || prev.city,
+                    province: sel.province || prev.province,
+                    latitude: sel.lat,
+                    longitude: sel.lng,
+                  }));
+                }}
+                onClear={() => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    location: "", // opcional, pero recomendable
+                    city: "",
+                    province: "",
+                    latitude: null,
+                    longitude: null,
+                  }));
+                }}
+              />
+            </div>
+            {/* Ciudad / Provincia quedan editables y se autocompletan si hay datos */}
+            <div className="col-md-6">
+              <input
+                className="form-control"
+                name="city"
+                value={formData.city}
+                placeholder="Ciudad"
+                disabled
+              />
+            </div>
+            <div className="col-md-6">
+              <input
+                className="form-control"
+                name="province"
+                value={formData.province}
+                placeholder="Provincia"
+                disabled
+              />
+            </div>{" "}
+            <div className="col-md-6">
               <input
                 className="form-control"
                 name="location"
@@ -149,22 +223,31 @@ const EventForm = ({ onClose }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="col-md-6">
-              <input
-                className="form-control"
-                name="city"
-                placeholder="Ciudad"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                className="form-control"
-                name="province"
-                placeholder="Provincia"
-                onChange={handleChange}
-              />
-            </div>
+            {mapCenter && (
+              <Map
+                height={300}
+                center={mapCenter}
+                zoom={mapZoom}
+                animate={true}
+                onBoundsChanged={({ center, zoom }) => {
+                  // permite arrastrar/zoomear manualmente sin que “rebote”
+                  setMapCenter(center);
+                  setMapZoom(zoom);
+                }}
+              >
+                {formData.latitude && formData.longitude && (
+                  <Marker
+                    width={50}
+                    anchor={[
+                      Number(formData.latitude),
+                      Number(formData.longitude),
+                    ]}
+                    // forzá re-mount del marcador si cambia la dirección
+                    key={`${formData.latitude},${formData.longitude}`}
+                  />
+                )}
+              </Map>
+            )}
             <div className="col-md-6">
               <select
                 className="form-select"
@@ -191,7 +274,6 @@ const EventForm = ({ onClose }) => {
                 onChange={handleChange}
               />
             </div>
-
             <div className="col-md-12 d-flex gap-4">
               <div className="form-check">
                 <input
@@ -214,7 +296,6 @@ const EventForm = ({ onClose }) => {
                 <label className="form-check-label">Control con QR</label>
               </div>
             </div>
-
             {!formData.is_free && (
               <>
                 <div className="col-md-6">
@@ -237,7 +318,6 @@ const EventForm = ({ onClose }) => {
                 </div>
               </>
             )}
-
             <div className="col-md-6">
               <input
                 type="number"
@@ -255,7 +335,6 @@ const EventForm = ({ onClose }) => {
                 onChange={handleChange}
               />
             </div>
-
             <div className="col-12 text-end">
               <Button type="submit" className="buttonGlobalOrganizer">
                 Crear evento
