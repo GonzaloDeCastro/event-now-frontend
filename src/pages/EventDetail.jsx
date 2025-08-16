@@ -46,7 +46,7 @@ const EventDetail = () => {
 
   if (loading) return <p className="text-center mt-5">Cargando evento...</p>;
   if (!event) return <p className="text-center mt-5">Evento no encontrado.</p>;
-
+  console.log("event detail", event);
   return (
     <div
       style={{
@@ -133,10 +133,16 @@ const EventDetail = () => {
         </div>
         <Map
           height={300}
-          defaultCenter={[-32.95698, -60.645007]}
+          defaultCenter={[
+            parseFloat(event.latitude),
+            parseFloat(event.longitude),
+          ]} // [event.lat, event.lng]}
           defaultZoom={14}
         >
-          <Marker width={50} anchor={[-32.95698, -60.645007]} />
+          <Marker
+            width={50}
+            anchor={[parseFloat(event.latitude), parseFloat(event.longitude)]}
+          />
         </Map>
 
         <div className="mt-4 d-flex justify-content-end">

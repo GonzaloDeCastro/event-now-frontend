@@ -111,7 +111,7 @@ const EventForm = ({ onClose }) => {
     setShowModal(true);
     onClose?.();
   };
-
+  console.log(`${formData.latitude},${formData.longitude}`);
   return (
     <>
       <a className="menu-item" onClick={handleShowModal}>
