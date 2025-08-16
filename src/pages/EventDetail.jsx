@@ -67,7 +67,7 @@ const EventDetail = () => {
           style={{ maxHeight: "400px", objectFit: "cover", width: "100%" }}
         />
 
-        <div className="row gy-3">
+        <div className={`row gy-3 ${styles.eventDetails}`}>
           <div className="col-md-6">
             <span>
               📅 <strong>Fecha:</strong> {event.date}
@@ -85,7 +85,8 @@ const EventDetail = () => {
           </div>
           <div className="col-md-6">
             <span>
-              💸 <strong>Acceso:</strong> {event.is_free ? "Gratuito" : "Pago"}
+              💸 <strong>Acceso:</strong>{" "}
+              {event.is_free ? "Gratuito" : `$${event.price}`}
             </span>
           </div>
           <div className="col-md-6">
@@ -99,9 +100,15 @@ const EventDetail = () => {
               🏛️ <strong>Tipo de lugar:</strong> {event.location_type}
             </span>
           </div>
+
           <div className="col-md-6">
             <span>
               🌍 <strong>Ubicación:</strong> {event.city}, {event.province}
+            </span>
+          </div>
+          <div className="col-6">
+            <span>
+              🎭 <strong>Categoría:</strong> {event.category}
             </span>
           </div>
 
@@ -110,11 +117,6 @@ const EventDetail = () => {
               📝 <strong>Descripción:</strong>
             </span>
             <p className="mt-1">{event.description}</p>
-          </div>
-          <div className="col-12">
-            <span>
-              🎭 <strong>Categoría:</strong> {event.category}
-            </span>
           </div>
         </div>
 

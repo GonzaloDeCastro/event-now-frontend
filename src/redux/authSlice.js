@@ -1,119 +1,170 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// src/redux/authSlice.js
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import API_URL from "../config";
+import API from "../config"; // mismo alias que usás en otros slices
 
-// Async thunk for user registration
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (userData, thunkAPI) => {
-    try {
-      const response = await axios.post(`${API_URL}/users/register`, userData);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.error || "Registration failed"
-      );
-    }
-  }
-);
+const initialState = {
+  user: null, // logged-in user info
+  loading: false, // async flag
+  error: null, // error messages
+  successMessage: null, // opcional (útil para UI feedback)
+};
 
-// Async thunk for user login
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (credentials, thunkAPI) => {
-    try {
-      const response = await axios.post(`${API_URL}/users/login`, credentials);
-      const { token } = response.data;
-
-      // Save the token in localStorage
-      localStorage.setItem("authToken", token);
-
-      return response.data.user; // Only return user info to Redux
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.error || "Login failed"
-      );
-    }
-  }
-);
-
-export const fetchUserFromToken = createAsyncThunk(
-  "auth/fetchUserFromToken",
-  async (_, thunkAPI) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      if (!token) return thunkAPI.rejectWithValue("No token found");
-
-      const response = await axios.get(`${API_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue("Invalid or expired token");
-    }
-  }
-);
-
-// Auth slice definition
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null, // Stores the logged-in user info
-    loading: false, // True during async operations
-    error: null, // Stores error messages
-  },
+  initialState,
   reducers: {
+    // Flags & messages
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload || null;
+    },
     clearAuthError: (state) => {
       state.error = null;
     },
+    setSuccess: (state, action) => {
+      state.successMessage = action.payload || null;
+    },
+    clearAuthSuccess: (state) => {
+      state.successMessage = null;
+    },
+
+    // Data
+    setUser: (state, action) => {
+      state.user = action.payload || null;
+    },
+
+    // Logout
     logoutUser: (state) => {
       state.user = null;
+      state.error = null;
+      state.successMessage = null;
       localStorage.removeItem("authToken");
     },
   },
-  extraReducers: (builder) => {
-    builder
-      // Register user flow
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        localStorage.setItem("authToken", action.payload.token);
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Login user flow
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(fetchUserFromToken.fulfilled, (state, action) => {
-        state.user = action.payload;
-      })
-      .addCase(fetchUserFromToken.rejected, (state) => {
-        state.user = null;
-      });
-  },
 });
 
-// Export actions and reducer
-export const { clearAuthError, logoutUser } = authSlice.actions;
+export const {
+  setLoading,
+  setError,
+  clearAuthError,
+  setSuccess,
+  clearAuthSuccess,
+  setUser,
+  logoutUser,
+} = authSlice.actions;
+
+/* ===========================
+   Thunks (axios + simple flow)
+   =========================== */
+
+/**
+ * Register user (saves token and sets user on success)
+ * @param {Object} userData
+ */
+export const registerUserAPI = (userData) => {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+    dispatch(clearAuthError());
+    dispatch(clearAuthSuccess());
+
+    try {
+      const res = await axios.post(`${API}/users/register`, userData);
+
+      if (res?.status === 200 || res?.status === 201) {
+        const { token, user, message } = res.data || {};
+        if (token) localStorage.setItem("authToken", token);
+        dispatch(setUser(user || null));
+        dispatch(setSuccess(message || "Registration successful"));
+      } else {
+        dispatch(setError(`Unexpected status: ${res?.status || "unknown"}`));
+      }
+    } catch (err) {
+      const apiErr =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "Registration failed";
+      dispatch(setError(apiErr));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+};
+
+/**
+ * Login user (saves token and sets user on success)
+ * @param {Object} credentials { email, password }
+ */
+export const loginUserAPI = (credentials) => {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+    dispatch(clearAuthError());
+    dispatch(clearAuthSuccess());
+
+    try {
+      const res = await axios.post(`${API}/users/login`, credentials);
+
+      if (res?.status === 200) {
+        const { token, user, message } = res.data || {};
+        if (token) localStorage.setItem("authToken", token);
+        dispatch(setUser(user || null));
+        dispatch(setSuccess(message || "Login successful"));
+      } else {
+        dispatch(setError(`Unexpected status: ${res?.status || "unknown"}`));
+      }
+    } catch (err) {
+      const apiErr =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "Login failed";
+      dispatch(setError(apiErr));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+};
+
+/**
+ * Fetch user from stored token (invalid -> clears user & token)
+ */
+export const fetchUserFromTokenAPI = () => {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+    dispatch(clearAuthError());
+
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        dispatch(setUser(null));
+        return;
+      }
+
+      const headers = { Authorization: `Bearer ${token}` };
+      const res = await axios.get(`${API}/users/me`, { headers });
+
+      if (res?.status === 200) {
+        dispatch(setUser(res.data || null));
+      } else {
+        dispatch(setUser(null));
+        localStorage.removeItem("authToken");
+        dispatch(setError("Invalid session"));
+      }
+    } catch (err) {
+      dispatch(setUser(null));
+      localStorage.removeItem("authToken");
+      const apiErr =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Invalid or expired token";
+      dispatch(setError(apiErr));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+};
+
 export default authSlice.reducer;

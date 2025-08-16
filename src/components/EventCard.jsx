@@ -31,9 +31,17 @@ const EventCard = ({ event }) => {
         <h5 className="card-title">{event.title}</h5>
         <p className="card-text">{event.location}</p>
         <p className="card-text">
-          <small className="text-muted">{event.date}</small>
+          <small className="text-muted">
+            {new Date(event.date).toLocaleDateString("es-AR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </small>
         </p>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 align-items-center">
           <button
             className={styles.more}
             onClick={() => navigate(`/event/${event.id}`)}
@@ -41,11 +49,20 @@ const EventCard = ({ event }) => {
             Ver más
           </button>
           <button
-            className={`btn btn-outline-danger btn-sm`}
+            className="btn btn-outline-danger btn-sm"
             onClick={handleAttend}
           >
             Asistir
           </button>
+
+          {/* Contenedor del precio */}
+          <div
+            className={`${styles.priceTag} ${
+              event.is_free === 1 ? styles.free : styles.paid
+            }`}
+          >
+            {event.is_free === 1 ? "Gratis" : `$${event.price}`}
+          </div>
         </div>
       </div>
     </div>

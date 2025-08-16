@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyCreatedEvents } from "../redux/eventSlice";
+import { getMyCreatedEventsAPI } from "../redux/eventSlice";
 import EventCard from "../components/EventCard";
 import styles from "./Home.module.css";
 
@@ -11,7 +11,7 @@ const MyCreatedEvents = () => {
   );
   console.log("myCreatedEvents", myCreatedEvents);
   useEffect(() => {
-    dispatch(getMyCreatedEvents());
+    dispatch(getMyCreatedEventsAPI());
   }, [dispatch]);
 
   return (

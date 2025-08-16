@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEvents } from "../redux/eventSlice";
+import { getAllEventsAPI } from "../redux/eventSlice";
 import styles from "./Home.module.css";
 import EventCard from "../components/EventCard";
 
@@ -20,7 +20,7 @@ const Home = () => {
   const { allEvents, loading, error } = useSelector((state) => state.events);
 
   useEffect(() => {
-    dispatch(getAllEvents());
+    dispatch(getAllEventsAPI());
   }, [dispatch]);
 
   const filteredEvents = allEvents

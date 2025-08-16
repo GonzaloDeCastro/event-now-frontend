@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../redux/authSlice";
+import { registerUserAPI } from "../redux/authSlice";
 import Swal from "sweetalert2";
 
 const Register = ({ show, onHide }) => {
@@ -58,7 +58,7 @@ const Register = ({ show, onHide }) => {
     }
 
     dispatch(
-      registerUser({
+      registerUserAPI({
         ...formData,
         role,
       })

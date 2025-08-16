@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, clearAuthError } from "../redux/authSlice";
+import { loginUserAPI, clearAuthError } from "../redux/authSlice";
 import Swal from "sweetalert2";
 
 const Login = ({ show, onHide }) => {
@@ -19,7 +19,7 @@ const Login = ({ show, onHide }) => {
       return;
     }
 
-    dispatch(loginUser({ emailOrUsername, password }));
+    dispatch(loginUserAPI({ emailOrUsername, password }));
     setJustLoggedIn(true);
   };
 

@@ -23,3 +23,33 @@
 .iconCloseEventDetail:hover {
   color: red;
 }
+
+.eventDetails {
+  background-color: #f8f9fa; /* gris claro */
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+.eventDetails span {
+  display: block;
+  font-size: 1rem;
+  color: #343a40;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.eventDetails span strong {
+  color: #212529;
+}
+
+.eventDetails p {
+  margin-top: 5px;
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.eventDetails .col-12:last-child span {
+  border-bottom: none; /* quita la línea al final */
+}

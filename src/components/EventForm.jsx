@@ -2,22 +2,20 @@ import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createEvent,
+  createEventAPI,
   clearEventError,
   clearEventSuccess,
 } from "../redux/eventSlice";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-/**
- * Modal component for organizers to create a new event.
- * Shows only if user is logged in and is an organizer.
- */
 const EventForm = ({ onClose }) => {
-  const { user } = useSelector((state) => state.auth);
-  const token = localStorage.getItem("authToken");
-  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
   const { error, successMessage } = useSelector((state) => state.events);
+
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -47,29 +45,8 @@ const EventForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await dispatch(
-        createEvent({
-          eventData: formData,
-          token: token,
-        })
-      );
-      Swal.fire({
-        icon: "success",
-        title: "Evento creado",
-        text: "El evento fue creado exitosamente.",
-        timer: 1800,
-        showConfirmButton: false,
-      });
-      setShowModal(false); // cerrar modal
-    } catch (error) {
-      console.error("Error al crear evento:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Ocurrió un error al crear el evento.",
-      });
-    }
+    // Disparamos la creación; NO mostramos swal acá.
+    dispatch(createEventAPI(formData));
   };
 
   useEffect(() => {
@@ -82,24 +59,32 @@ const EventForm = ({ onClose }) => {
         showConfirmButton: false,
       });
       dispatch(clearEventSuccess());
-      setShowModal(false); // cerrar modal
+      setShowModal(false);
+      navigate("/my-created-events");
     }
     if (error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error,
+        text: typeof error === "string" ? error : JSON.stringify(error),
       });
       dispatch(clearEventError());
     }
-  }, [successMessage, error]);
+  }, [successMessage, error, dispatch]);
 
-  // Check if user is logged in and is an organizer and show button Crear Evento
+  // Limpia mensajes si el modal se cierra o el componente se desmonta (opcional)
+  useEffect(() => {
+    return () => {
+      dispatch(clearEventError());
+      dispatch(clearEventSuccess());
+    };
+  }, [dispatch]);
+
   if (!user || user.role !== 2) return null;
 
   const handleShowModal = () => {
     setShowModal(true);
-    onClose();
+    onClose?.();
   };
 
   return (
